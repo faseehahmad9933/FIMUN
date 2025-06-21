@@ -3,94 +3,139 @@ import Image from "next/image";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 import { motion, useAnimation, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const { scrollY } = useScroll()
+  const [videoSrc, setVideoSrc] = useState("AIV.mp4");
+  const [Titles, setTitles] = useState("block");
+  const [showProfileBox, setShowProfileBox] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
 
-  useMotionValueEvent(scrollY, "change", (latest: number) => {
-    console.log("Page scroll: ", latest)
+  useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
+    console.log("Scroll progress: ", latest)
+    if (latest < 0.3) {
+      console.log("Switching to AIV.mp4")
+      setVideoSrc("AIV.mp4");
+      setTitles("block");
+      setShowProfileBox(false);
+    } else {
+      console.log("Switching to Untitled.mp4")
+      setVideoSrc("AICHIP.mp4");
+      setTitles("invisible");
+      if (latest >= 0.125) {
+        setShowProfileBox(true);
+      }
+    }
   })
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const [beautyRef, beautyInView] = useInView({
     threshold: 0.5,
     triggerOnce: false
   });
 
-  // Transform scroll progress to animation states
-  const titleScale = useTransform(scrollYProgress, [0, 0.25], [1, 1.2]);
-  const x = useTransform(scrollYProgress, [0, 0.1, 0.4, 0.6, 0.8, 1], [1,-850,-850,-850,-850,-850]);
-  const y = useTransform(scrollYProgress, [0, 0.1, 0.4, 0.6, 0.8, 1], [1,-100,-100,-100,-100,-100]);
-  // const d = useTransform(scrollYProgress, [0, 0.4], [1, 1.2]);
-  // const e = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
 
-
-  const imageScale = useTransform(scrollYProgress, [0.25, 0.5,], [1, 1.1]);
-  const textOpacity = useTransform(scrollYProgress, [0.5, 0.75], [1, 0.8]);
-  const titleRotation = useTransform(scrollYProgress, [0.75, 1], [0, 5]);
-
-  const [effectText] = useTypewriter({
-    words: [
-      "C.E.O of Pinetech",
-      "Software Engineer",
-      "Web Developer",
-      "Freelancer",
-      "Wordpress Developer",
-      "Leet-Coder",
-      "Student",
-    ],
-    loop: true,
-    typeSpeed: 100,
-    onLoopDone: () => console.log(`loop completed after 3 runs.`),
-  });
+  // const [effectText] = useTypewriter({
+  //   words: [
+  //     "C.E.O of Pinetech",
+  //     "Software Engineer",
+  //     "Web Developer",
+  //     "Freelancer",
+  //     "Wordpress Developer",
+  //     "Leet-Coder",
+  //     "Student",
+  //   ],
+  //   loop: true,
+  //   typeSpeed: 100,
+  //   onLoopDone: () => console.log(`loop completed after 3 runs.`),
+  // });
 
   return (
     <div className="Corebackground bg-amber-700 relative min-h-screen">
-      <div className="prof h-screen sticky top-0 left-0 bg-black flex flex-row items-center">
-        <div className="h-2/3 font-bold w-1/2 flex flex-col">
-          <motion.h1
-            style={{ scale: titleScale }}
-            className="font-extrabold font-mono text-7xl -mt-12 text-white ml-11"
-          >
-            Hi!
-          </motion.h1>
-          <motion.h1
-            style={{ scale: titleScale, rotate: titleRotation }}
-            className="font-bold font-mono text-4xl mt-5 ml-15 text-white"
-          >
-            I'm Faseeh Ahmad
-          </motion.h1>
-          <motion.h1
-            style={{ opacity: textOpacity }}
-            className="font-bold font-mono text-3xl mt-3 ml-15 text-cyan-300"
-          >
-            {effectText}
-          </motion.h1>
-        </div>
-
-        <div className="h-2/3 font-bold w-1/2 flex flex-col items-center justify-center">
+      {showSplash && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: 2.2, duration: 0.3 }}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: "#baf5e8" }}
+        >
           <motion.div
-            // initial = {{x:0, y: 0}}
-            style={{ x, y }}
-            // animate = {{left:xi , top: yi}}
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{
+              opacity: 1,
+              scale: [1, 1.08],
+            }}
+            transition={{
+              duration: 1.2,
+              type: "spring",
+              stiffness: 120,
+              damping: 12,
+              repeat: Infinity,
+              repeatType: "reverse",
+              repeatDelay: 0.7,
+            }}
+            className="flex flex-col items-center"
           >
             <Image
-              className="rounded-full mt-10"
-              src="/profile.jpg"
-              width={250}
-              height={250}
-              alt="background image"
+              src="/logo.png"
+              alt="FIMUN"
+              width={120}
+              height={120}
+              className="drop-shadow-lg"
             />
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.7, type: "spring", stiffness: 80 }}
+              className="mt-6 text-4xl font-extrabold text-black tracking-widest drop-shadow-lg font-poppins"
+            >
+              FIMUN
+            </motion.h1>
           </motion.div>
-          <motion.p
-            style={{ opacity: textOpacity }}
-            className="mb-4 mt-8 font-bold text-2xl font-mono text-white"
+        </motion.div>
+      )}
+      <div className="prof h-screen sticky top-0 left-0 bg-blue-900 flex flex-row items-center overflow-hidden">
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: videoSrc === "AIV.mp4" ? 1 : 0 }}
+          transition={{ duration: 1 }}
+          className="absolute top-0 left-0 w-full h-full"
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-75"
           >
-            CEO Of Techpine
-          </motion.p>
-        </div>
+            <source src="AIV.mp4" type="video/mp4" />
+          </video>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: videoSrc === "AICHIP.mp4" ? 1 : 0 }}
+          transition={{ duration: 1 }}
+          className="absolute top-0 left-0 w-full h-full"
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-75"
+          >
+            <source src="AICHIP.mp4" type="video/mp4" />
+          </video>
+        </motion.div>
+        
+
       </div>
       <motion.div
         ref={beautyRef}
