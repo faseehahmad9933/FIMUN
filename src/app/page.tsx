@@ -1,34 +1,21 @@
 "use client";
 import Image from "next/image";
-import { useTypewriter, Cursor } from "react-simple-typewriter";
-import { motion, useAnimation, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
-  const { scrollY } = useScroll()
   const [videoSrc, setVideoSrc] = useState("AIV.mp4");
-  const [Titles, setTitles] = useState("block");
-  const [showProfileBox, setShowProfileBox] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
 
   useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
-    console.log("Scroll progress: ", latest)
     if (latest < 0.3) {
-      console.log("Switching to AIV.mp4")
       setVideoSrc("AIV.mp4");
-      setTitles("block");
-      setShowProfileBox(false);
     } else {
-      console.log("Switching to Untitled.mp4")
       setVideoSrc("AICHIP.mp4");
-      setTitles("invisible");
-      if (latest >= 0.125) {
-        setShowProfileBox(true);
-      }
     }
-  })
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 2500);
@@ -39,22 +26,6 @@ export default function Home() {
     threshold: 0.5,
     triggerOnce: false
   });
-
-
-  // const [effectText] = useTypewriter({
-  //   words: [
-  //     "C.E.O of Pinetech",
-  //     "Software Engineer",
-  //     "Web Developer",
-  //     "Freelancer",
-  //     "Wordpress Developer",
-  //     "Leet-Coder",
-  //     "Student",
-  //   ],
-  //   loop: true,
-  //   typeSpeed: 100,
-  //   onLoopDone: () => console.log(`loop completed after 3 runs.`),
-  // });
 
   return (
     <div className="Corebackground bg-amber-700 relative min-h-screen">
@@ -134,8 +105,6 @@ export default function Home() {
             <source src="AICHIP.mp4" type="video/mp4" />
           </video>
         </motion.div>
-        
-
       </div>
       <motion.div
         ref={beautyRef}
