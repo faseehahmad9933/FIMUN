@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Geist, Geist_Mono, Poppins, Rubik } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,8 +18,14 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
+const rubik = Rubik({
+  variable: "--font-rubik",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
-  title: "Faseeh Ahmad || Portfolio",
+  title: "FIMUN 25 || Fazaia's Model United Nations",
   keywords: [
     "FIMUN",
     "fimun",
@@ -31,7 +37,7 @@ export const metadata: Metadata = {
     "Model United Nations",
     "Faseeh Ahmad",
   ],
-  description: "This is the official Website of FIMUN 2025, All the information of Fimen is Given Website",
+  description: "This is the official Website of FIMUN 2025, All the information of Fimun is Given Website",
   authors: [
     {
       name: "Faseeh Ahmad",
@@ -47,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${rubik.variable} antialiased`}
       >
         {children}
       </body>

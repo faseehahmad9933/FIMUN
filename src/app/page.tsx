@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
+import Navbar from "./Navbar";
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -28,14 +29,16 @@ export default function Home() {
   });
 
   return (
+    <>
+      <Navbar />
     <div className="Corebackground bg-amber-700 relative min-h-screen">
       {showSplash && (
         <motion.div
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
           transition={{ delay: 2.2, duration: 0.3 }}
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ backgroundColor: "#baf5e8" }}
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ backgroundColor: "#fbfbfd" }}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
@@ -54,18 +57,18 @@ export default function Home() {
             }}
             className="flex flex-col items-center"
           >
-            <Image
-              src="/logo.png"
-              alt="FIMUN"
-              width={120}
-              height={120}
-              className="drop-shadow-lg"
-            />
+              <Image
+                src="/logo.png"
+                alt="FIMUN"
+                width={120}
+                height={120}
+                className="drop-shadow-lg"
+              />
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.7, type: "spring", stiffness: 80 }}
-              className="mt-6 text-4xl font-extrabold text-black tracking-widest drop-shadow-lg font-poppins"
+                className="mt-6 text-4xl font-extrabold text-black tracking-widest drop-shadow-lg font-poppins"
             >
               FIMUN
             </motion.h1>
@@ -116,5 +119,6 @@ export default function Home() {
         <h2 className="text-4xl font-bold text-white text-center">The End !</h2>
       </motion.div>
     </div>
+    </>
   );
 }
